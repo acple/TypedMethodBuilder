@@ -1,6 +1,6 @@
 # TypedMethodBuilder
 
-The IL MethodBuidler with typed callstack representation and automatic delegate type determination
+The IL MethodBuilder with typed callstack representation and automatic delegate type determination
 
 
 ## What's this
