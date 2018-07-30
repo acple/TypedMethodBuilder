@@ -51,6 +51,40 @@ namespace TypedMethodBuilder
             => generator.Emit(this.OpCode, (byte)this._index);
     }
 
+    internal class OpLdc_I4 : Op
+    {
+        private readonly int _value;
+
+        public OpLdc_I4(int value) : base(OpCodes.Nop)
+        {
+            this._value = value;
+        }
+
+        public override void Emit(ILGenerator generator)
+        {
+            var value = this._value;
+
+            switch (value)
+            {
+                case -1: generator.Emit(OpCodes.Ldc_I4_M1); return;
+                case 0: generator.Emit(OpCodes.Ldc_I4_0); return;
+                case 1: generator.Emit(OpCodes.Ldc_I4_1); return;
+                case 2: generator.Emit(OpCodes.Ldc_I4_2); return;
+                case 3: generator.Emit(OpCodes.Ldc_I4_3); return;
+                case 4: generator.Emit(OpCodes.Ldc_I4_4); return;
+                case 5: generator.Emit(OpCodes.Ldc_I4_5); return;
+                case 6: generator.Emit(OpCodes.Ldc_I4_6); return;
+                case 7: generator.Emit(OpCodes.Ldc_I4_7); return;
+                case 8: generator.Emit(OpCodes.Ldc_I4_8); return;
+            }
+
+            if ((sbyte)value == value)
+                generator.Emit(OpCodes.Ldc_I4_S, (byte)value);
+            else
+                generator.Emit(OpCodes.Ldc_I4, value);
+        }
+    }
+
     internal class OpDeclareLocal : Op
     {
         private readonly Type _type;

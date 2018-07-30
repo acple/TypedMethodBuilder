@@ -4,13 +4,6 @@ namespace TypedMethodBuilder
 {
     public static partial class ILBuilder
     {
-        public static IL<TParameter, TLocal, Stack<T, TCallStack>> Ldnull<T, TParameter, TLocal, TCallStack>(this IL<TParameter, TLocal, TCallStack> il, T witness)
-            where TParameter : ITypeList
-            where TLocal : ITypeList
-            where TCallStack : ITypeList
-            where T : class
-            => new IL<TParameter, TLocal, Stack<T, TCallStack>>(new Op(OpCodes.Ldnull), il);
-
         public static IL<Param<TThis, TParameter>, TLocal, Stack<TThis, TCallStack>> Ldarg_0<TThis, TParameter, TLocal, TCallStack>(this IL<Param<TThis, TParameter>, TLocal, TCallStack> il)
             where TParameter : ITypeList
             where TLocal : ITypeList
