@@ -67,7 +67,7 @@ namespace TypedMethodBuilder
                 restrictedSkipVisibility: true);
 
             var generator = method.GetILGenerator();
-            foreach (var op in stack.Reverse())
+            foreach (var op in stack.AsEnumerable().Reverse())
                 op.Emit(generator);
             generator.Emit(OpCodes.Ret);
 

@@ -3,11 +3,13 @@ using System.Collections.Generic;
 
 namespace TypedMethodBuilder
 {
-    internal interface IStack<T> : IEnumerable<T>
+    internal interface IStack<T>
     {
         T Value { get; }
 
         IStack<T> Parent { get; }
+
+        IEnumerable<T> AsEnumerable();
     }
 
     public class IL<TParameter, TLocal, TCallStack> : IStack<Op>
@@ -32,13 +34,10 @@ namespace TypedMethodBuilder
             this._parent = parent;
         }
 
-        IEnumerator<Op> IEnumerable<Op>.GetEnumerator()
+        IEnumerable<Op> IStack<Op>.AsEnumerable()
         {
             for (var stack = this as IStack<Op>; stack.Parent != null; stack = stack.Parent)
                 yield return stack.Value;
         }
-
-        IEnumerator IEnumerable.GetEnumerator()
-            => (this as IEnumerable<Op>).GetEnumerator();
     }
 }
