@@ -51,13 +51,13 @@ namespace TypedMethodBuilder
             => generator.Emit(this.OpCode, this._type);
     }
 
-    internal class OpLdarg : Op
+    internal class OpIndex_S : Op
     {
-        private readonly int _index;
+        private readonly byte _index;
 
-        public OpLdarg(int index) : base(OpCodes.Ldarg_S)
+        public OpIndex_S(OpCode opCode, int index) : base(opCode)
         {
-            this._index = index;
+            this._index = (byte)index;
         }
 
         public override void Emit(ILGenerator generator)

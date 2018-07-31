@@ -126,5 +126,33 @@ namespace UnitTest.TypedMethodBuilder
                 func.Invoke().Is(new DateTime(2118, 8, 1));
             }
         }
+
+        [Fact]
+        public void RefTest()
+        {
+            {
+                var func = IL<object>.MethodBuilder<int>()
+                    .Ldarga_1()
+                    .CallInstance((Func<string>)default(int).ToString)
+                    .Build();
+
+                foreach (var x in Enumerable.Range(-100, 65535))
+                    func.Invoke(x).Is(x.ToString());
+            }
+
+            {
+                var func = IL<object>.MethodBuilder<DateTime>()
+                    .Ldarga_1()
+                    .Ldc_I4(100)
+                    .CallInstance(default(DateTime).AddYears)
+                    .Build();
+
+                var source = Enumerable.Repeat(new Random("date".GetHashCode()), 1000)
+                    .Select(x => (long)x.Next())
+                    .Select(x => new DateTime(x));
+                foreach (var x in source)
+                    func.Invoke(x).Is(x.AddYears(100));
+            }
+        }
     }
 }

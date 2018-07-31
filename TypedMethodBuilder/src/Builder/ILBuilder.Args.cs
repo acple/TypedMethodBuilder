@@ -32,6 +32,6 @@ namespace TypedMethodBuilder
             where TParameter : ITypeList
             where TLocal : ITypeList
             where TCallStack : ITypeList
-            => new IL<Param<TThis, Param<T, Param<T2, Param<T3, Param<T4, TParameter>>>>>, TLocal, Stack<T4, TCallStack>>(new OpLdarg(4), il);
+            => new IL<Param<TThis, Param<T, Param<T2, Param<T3, Param<T4, TParameter>>>>>, TLocal, Stack<T4, TCallStack>>(new OpIndex_S(OpCodes.Ldarg_S, 4), il);
     }
 }

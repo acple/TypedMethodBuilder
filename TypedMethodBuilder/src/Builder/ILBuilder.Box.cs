@@ -5,9 +5,6 @@ namespace TypedMethodBuilder
     public interface Boxed<T>
     { }
 
-    public interface Ref<T>
-    { }
-
     public static partial class ILBuilder
     {
         public static IL<TParameter, TLocal, Stack<Boxed<T>, TCallStack>> Box<T, TParameter, TLocal, TCallStack>(this IL<TParameter, TLocal, Stack<T, TCallStack>> il)
@@ -44,11 +41,5 @@ namespace TypedMethodBuilder
             where T : class
             where TTarget : class
             => new IL<TParameter, TLocal, Stack<TTarget, TCallStack>>(new OpType(OpCodes.Castclass, typeof(TTarget)), il);
-
-        public static IL<TParameter, TLocal, Stack<T, TCallStack>> Ldobj<T, TParameter, TLocal, TCallStack>(this IL<TParameter, TLocal, Stack<Ref<T>, TCallStack>> il)
-            where TParameter : ITypeList
-            where TLocal : ITypeList
-            where TCallStack : ITypeList
-            => new IL<TParameter, TLocal, Stack<T, TCallStack>>(new OpType(OpCodes.Ldobj, typeof(T)), il);
     }
 }
