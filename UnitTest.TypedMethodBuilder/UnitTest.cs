@@ -83,5 +83,48 @@ namespace UnitTest.TypedMethodBuilder
             foreach (var (value, func) in source)
                 func.Invoke().Is(value);
         }
+
+        [Fact]
+        public void BoxTest()
+        {
+            {
+                var func = IL<object>.MethodBuilder<int>()
+                    .Ldarg_1()
+                    .Box()
+                    .Callvirt((Func<string>)new object().ToString)
+                    .Build();
+
+                func.Invoke(1234).Is("1234");
+            }
+
+            {
+                var func = IL<object>.MethodBuilder<int>()
+                    .Ldarg_1()
+                    .Stloc_0()
+                    .Ldloc_0()
+                    .Box()
+                    .Stloc_1()
+                    .LdLoc_1()
+                    .Unbox_Any()
+                    .Ldloc_0()
+                    .Add()
+                    .Build();
+
+                foreach (var x in Enumerable.Repeat(new Random("test".GetHashCode()), 10000).Select(x => x.Next()))
+                    func.Invoke(x).Is(x + x);
+            }
+
+            {
+                var func = IL<object>.MethodBuilder()
+                    .Ldnull(null as object)
+                    .CallInstance(() => new DateTime(2018, 8, 1))
+                    .Box().Unbox() // it's ref
+                    .Ldc_I4(100)
+                    .CallInstance(default(DateTime).AddYears)
+                    .Build();
+
+                func.Invoke().Is(new DateTime(2118, 8, 1));
+            }
+        }
     }
 }

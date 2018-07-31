@@ -38,6 +38,19 @@ namespace TypedMethodBuilder
             => generator.EmitCall(this.OpCode, this._method, null);
     }
 
+    internal class OpType : Op
+    {
+        private readonly Type _type;
+
+        public OpType(OpCode opCode, Type type) : base(opCode)
+        {
+            this._type = type;
+        }
+
+        public override void Emit(ILGenerator generator)
+            => generator.Emit(this.OpCode, this._type);
+    }
+
     internal class OpLdarg : Op
     {
         private readonly int _index;
