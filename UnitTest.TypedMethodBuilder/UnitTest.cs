@@ -77,7 +77,7 @@ namespace UnitTest.TypedMethodBuilder
         public void Ldc_I4Test()
         {
             var source = Enumerable.Range(-1, 100)
-                .Concat(Enumerable.Repeat(new Random("seed".GetHashCode()), 10000).Select(x => x.Next()))
+                .Concat(Enumerable.Repeat(new Random("seed".GetHashCode()), 10000).Select(x => x.Next(int.MinValue, int.MaxValue)))
                 .Select(x => (x, func: IL<object>.MethodBuilder().Ldc_I4(x).Build()));
 
             foreach (var (value, func) in source)
@@ -110,7 +110,9 @@ namespace UnitTest.TypedMethodBuilder
                     .Add()
                     .Build();
 
-                foreach (var x in Enumerable.Repeat(new Random("test".GetHashCode()), 10000).Select(x => x.Next()))
+                var source = Enumerable.Repeat(new Random("test".GetHashCode()), 10000)
+                    .Select(x => x.Next(int.MinValue, int.MaxValue));
+                foreach (var x in source)
                     func.Invoke(x).Is(x + x);
             }
 
