@@ -1,6 +1,7 @@
 namespace TypedMethodBuilder
 {
     public static class IL<TInstance>
+        where TInstance : class
     {
         public static IL<Param<TInstance, Empty>, Empty, Empty> MethodBuilder()
             => new IL<Param<TInstance, Empty>, Empty, Empty>();
