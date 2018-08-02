@@ -3,41 +3,42 @@ using System.Collections.Generic;
 
 namespace TypedMethodBuilder
 {
-    internal interface IStack<T>
+    internal interface IL
     {
-        T Value { get; }
+        Stack<Op> Ops { get; }
 
-        IStack<T> Parent { get; }
-
-        IEnumerable<T> AsEnumerable();
+        Stack<ILabel> Labels { get; }
     }
 
-    public class IL<TParameter, TLocal, TCallStack> : IStack<Op>
+    public class IL<TParameter, TLocal, TCallStack> : IL
         where TParameter : ITypeList
         where TLocal : ITypeList
         where TCallStack : ITypeList
     {
-        private readonly Op _op;
+        private readonly Stack<Op> _ops;
 
-        private readonly IStack<Op> _parent;
+        private readonly Stack<ILabel> _labels;
 
-        Op IStack<Op>.Value => this._op;
+        Stack<Op> IL.Ops => this._ops;
 
-        IStack<Op> IStack<Op>.Parent => this._parent;
+        Stack<ILabel> IL.Labels => this._labels;
 
-        internal IL() : this(Op.Nop, null)
+        internal IL() : this(Stack<Op>.Empty, Stack<ILabel>.Empty)
         { }
 
-        internal IL(Op op, IStack<Op> parent)
-        {
-            this._op = op;
-            this._parent = parent;
-        }
+        internal IL(Op op, IL parent) : this(parent.Ops.Add(op), parent.Labels)
+        { }
 
-        IEnumerable<Op> IStack<Op>.AsEnumerable()
+        internal IL(ILabel label, IL parent) : this(parent.Ops, parent.Labels.Add(label))
+        { }
+
+        internal IL(Op op, ILabel label, IL parent) : this(parent.Ops.Add(op), parent.Labels.Add(label))
+        { }
+
+        private IL(Stack<Op> ops, Stack<ILabel> labels)
         {
-            for (var stack = this as IStack<Op>; stack.Parent != null; stack = stack.Parent)
-                yield return stack.Value;
+            this._ops = ops;
+            this._labels = labels;
         }
     }
 }

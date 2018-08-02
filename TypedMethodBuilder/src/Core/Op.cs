@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 
@@ -6,16 +8,17 @@ namespace TypedMethodBuilder
 {
     internal class Op
     {
-        public static Op Nop { get; } = new Op(OpCodes.Nop);
-
         public OpCode OpCode { get; }
+
+        public Op() : this(OpCodes.Nop)
+        { }
 
         public Op(OpCode opCode)
         {
             this.OpCode = opCode;
         }
 
-        public virtual void Emit(ILGenerator generator)
+        public virtual void Emit(ILGenerator generator, IReadOnlyDictionary<ILabel, Label> labels)
             => generator.Emit(this.OpCode);
 
         public override string ToString()
@@ -34,7 +37,7 @@ namespace TypedMethodBuilder
             this._method = method;
         }
 
-        public override void Emit(ILGenerator generator)
+        public override void Emit(ILGenerator generator, IReadOnlyDictionary<ILabel, Label> labels)
             => generator.EmitCall(this.OpCode, this._method, null);
     }
 
@@ -47,7 +50,7 @@ namespace TypedMethodBuilder
             this._type = type;
         }
 
-        public override void Emit(ILGenerator generator)
+        public override void Emit(ILGenerator generator, IReadOnlyDictionary<ILabel, Label> labels)
             => generator.Emit(this.OpCode, this._type);
     }
 
@@ -60,7 +63,7 @@ namespace TypedMethodBuilder
             this._index = index;
         }
 
-        public override void Emit(ILGenerator generator)
+        public override void Emit(ILGenerator generator, IReadOnlyDictionary<ILabel, Label> labels)
             => generator.Emit(this.OpCode, this._index);
     }
 
@@ -68,12 +71,12 @@ namespace TypedMethodBuilder
     {
         private readonly int _value;
 
-        public OpLdc_I4(int value) : base(OpCodes.Nop)
+        public OpLdc_I4(int value) : base()
         {
             this._value = value;
         }
 
-        public override void Emit(ILGenerator generator)
+        public override void Emit(ILGenerator generator, IReadOnlyDictionary<ILabel, Label> labels)
         {
             var value = this._value;
 
@@ -107,10 +110,49 @@ namespace TypedMethodBuilder
             this._type = type;
         }
 
-        public override void Emit(ILGenerator generator)
+        public override void Emit(ILGenerator generator, IReadOnlyDictionary<ILabel, Label> labels)
         {
             generator.DeclareLocal(this._type);
             generator.Emit(this.OpCode);
         }
+    }
+
+    internal class OpMarkLabel : Op
+    {
+        private readonly ILabel _label;
+
+        public OpMarkLabel(ILabel label) : base()
+        {
+            this._label = label;
+        }
+
+        public override void Emit(ILGenerator generator, IReadOnlyDictionary<ILabel, Label> labels)
+            => generator.MarkLabel(labels[this._label]);
+    }
+
+    internal class OpLabel : Op
+    {
+        private readonly ILabel _label;
+
+        public OpLabel(OpCode opCode, ILabel label) : base(opCode)
+        {
+            this._label = label;
+        }
+
+        public override void Emit(ILGenerator generator, IReadOnlyDictionary<ILabel, Label> labels)
+            => generator.Emit(this.OpCode, labels[this._label]);
+    }
+
+    internal class OpLabels : Op
+    {
+        private readonly IEnumerable<ILabel> _labels;
+
+        public OpLabels(OpCode opCode, IEnumerable<ILabel> labels) : base(opCode)
+        {
+            this._labels = labels;
+        }
+
+        public override void Emit(ILGenerator generator, IReadOnlyDictionary<ILabel, Label> labels)
+            => generator.Emit(this.OpCode, labels.Join(this._labels, x => x.Key, x => x, (x, _) => x.Value).ToArray());
     }
 }

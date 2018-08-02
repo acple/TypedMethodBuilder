@@ -57,7 +57,7 @@ namespace TypedMethodBuilder
             where TLocal : ITypeList
             => Build<Func<T, T2, T3, T4, TResult>>(il, target, typeof(TResult), typeof(TThis), typeof(T), typeof(T2), typeof(T3), typeof(T4));
 
-        private static TDelegate Build<TDelegate>(IStack<Op> stack, object target, Type returnType, params Type[] parameters)
+        private static TDelegate Build<TDelegate>(IL il, object target, Type returnType, params Type[] parameters)
             where TDelegate : Delegate
         {
             var method = new DynamicMethod(
@@ -67,8 +67,11 @@ namespace TypedMethodBuilder
                 restrictedSkipVisibility: true);
 
             var generator = method.GetILGenerator();
-            foreach (var op in stack.AsEnumerable().Reverse())
-                op.Emit(generator);
+            var labels = il.Labels.Reverse().ToDictionary(x => x, _ => generator.DefineLabel());
+
+            foreach (var op in il.Ops.Reverse())
+                op.Emit(generator, labels);
+
             generator.Emit(OpCodes.Ret);
 
             return (TDelegate)method.CreateDelegate(typeof(TDelegate), target);
