@@ -55,13 +55,13 @@ namespace TypedMethodBuilder
     {
         private readonly byte _index;
 
-        public OpIndex_S(OpCode opCode, int index) : base(opCode)
+        public OpIndex_S(OpCode opCode, byte index) : base(opCode)
         {
-            this._index = (byte)index;
+            this._index = index;
         }
 
         public override void Emit(ILGenerator generator)
-            => generator.Emit(this.OpCode, (byte)this._index);
+            => generator.Emit(this.OpCode, this._index);
     }
 
     internal class OpLdc_I4 : Op
