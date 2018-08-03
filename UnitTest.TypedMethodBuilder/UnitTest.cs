@@ -78,7 +78,7 @@ namespace UnitTest.TypedMethodBuilder
         {
             var source = Enumerable.Range(-1, 100)
                 .Concat(Enumerable.Repeat(new Random("seed".GetHashCode()), 10000).Select(x => x.Next(int.MinValue, int.MaxValue)))
-                .Select(x => (x, func: IL<object>.MethodBuilder().Ldc_I4(x).Build()));
+                .Select(x => (x, func: IL.MethodBuilder().Ldc_I4(x).Build()));
 
             foreach (var (value, func) in source)
                 func.Invoke().Is(value);
@@ -88,7 +88,7 @@ namespace UnitTest.TypedMethodBuilder
         public void BoxTest()
         {
             {
-                var func = IL<object>.MethodBuilder<int>()
+                var func = IL.MethodBuilder<int>()
                     .Ldarg_1()
                     .Box()
                     .Callvirt((Func<string>)new object().ToString)
@@ -117,7 +117,7 @@ namespace UnitTest.TypedMethodBuilder
             }
 
             {
-                var func = IL<object>.MethodBuilder()
+                var func = IL.MethodBuilder()
                     .Ldnull(null as object)
                     .CallInstance(() => new DateTime(2018, 8, 1))
                     .Box().Unbox() // it's ref
@@ -133,7 +133,7 @@ namespace UnitTest.TypedMethodBuilder
         public void RefTest()
         {
             {
-                var func = IL<object>.MethodBuilder<int>()
+                var func = IL.MethodBuilder<int>()
                     .Ldarga_1()
                     .CallInstance((Func<string>)default(int).ToString)
                     .Build();
@@ -143,7 +143,7 @@ namespace UnitTest.TypedMethodBuilder
             }
 
             {
-                var func = IL<object>.MethodBuilder<DateTime>()
+                var func = IL.MethodBuilder<DateTime>()
                     .Ldarga_1()
                     .Ldc_I4(100)
                     .CallInstance(default(DateTime).AddYears)
@@ -161,7 +161,7 @@ namespace UnitTest.TypedMethodBuilder
         public void LabelTest()
         {
             {
-                var func = IL<object>.MethodBuilder<int, int>() // (x, y) => !(x > y) ? x : y;
+                var func = IL.MethodBuilder<int, int>() // (x, y) => !(x > y) ? x : y;
                     .Ldarg_1()
                     .Ldarg_2()
                     .Bgt_S(out var ifArg1IsGreaterThanArg2)
@@ -176,7 +176,7 @@ namespace UnitTest.TypedMethodBuilder
             }
 
             {
-                var func = IL<object>.MethodBuilder<int, int>()
+                var func = IL.MethodBuilder<int, int>()
                     .Ldarg_1().Dup().Dup().Dup().Dup() // deep stack
                     .Ldarg_2()
                     .Bge_S(out var label)
@@ -191,7 +191,7 @@ namespace UnitTest.TypedMethodBuilder
             }
 
             {
-                var func = IL<object>.MethodBuilder<int, int>()
+                var func = IL.MethodBuilder<int, int>()
                     .Ldc_I4(0) // counter on stack
 
                     .Ldarg_1().Stloc_0() // loc0 = arg1

@@ -57,7 +57,7 @@ namespace TypedMethodBuilder
             where TLocal : ITypeList
             => Build<Func<T, T2, T3, T4, TResult>>(il, target, typeof(TResult), typeof(TThis), typeof(T), typeof(T2), typeof(T3), typeof(T4));
 
-        private static TDelegate Build<TDelegate>(IL il, object target, Type returnType, params Type[] parameters)
+        private static TDelegate Build<TDelegate>(IIL il, object target, Type returnType, params Type[] parameters)
             where TDelegate : Delegate
         {
             var method = new DynamicMethod(
