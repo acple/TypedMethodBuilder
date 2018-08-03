@@ -49,25 +49,25 @@ namespace TypedMethodBuilder
 
     public static partial class ILBuilder
     {
-        public static IL<TParameter, Local<T, TLocal>, Stack<Ref<T>, TCallStack>> Ldloca_0<TThis, T, TParameter, TLocal, TCallStack>(this IL<TParameter, Local<T, TLocal>, TCallStack> il)
+        public static IL<TParameter, Local<T, TLocal>, Stack<Ref<T>, TCallStack>> Ldloca_0<T, TParameter, TLocal, TCallStack>(this IL<TParameter, Local<T, TLocal>, TCallStack> il)
             where TParameter : ITypeList
             where TLocal : ITypeList
             where TCallStack : ITypeList
             => new IL<TParameter, Local<T, TLocal>, Stack<Ref<T>, TCallStack>>(new OpIndex_S(OpCodes.Ldloca_S, 0), il);
 
-        public static IL<TParameter, Local<T, Local<T2, TLocal>>, Stack<Ref<T2>, TCallStack>> Ldloca_1<TThis, T, T2, TParameter, TLocal, TCallStack>(this IL<TParameter, Local<T, Local<T2, TLocal>>, TCallStack> il)
+        public static IL<TParameter, Local<T, Local<T2, TLocal>>, Stack<Ref<T2>, TCallStack>> Ldloca_1<T, T2, TParameter, TLocal, TCallStack>(this IL<TParameter, Local<T, Local<T2, TLocal>>, TCallStack> il)
             where TParameter : ITypeList
             where TLocal : ITypeList
             where TCallStack : ITypeList
             => new IL<TParameter, Local<T, Local<T2, TLocal>>, Stack<Ref<T2>, TCallStack>>(new OpIndex_S(OpCodes.Ldloca_S, 1), il);
 
-        public static IL<TParameter, Local<T, Local<T2, Local<T3, TLocal>>>, Stack<Ref<T3>, TCallStack>> Ldloca_2<TThis, T, T2, T3, TParameter, TLocal, TCallStack>(this IL<TParameter, Local<T, Local<T2, Local<T3, TLocal>>>, TCallStack> il)
+        public static IL<TParameter, Local<T, Local<T2, Local<T3, TLocal>>>, Stack<Ref<T3>, TCallStack>> Ldloca_2<T, T2, T3, TParameter, TLocal, TCallStack>(this IL<TParameter, Local<T, Local<T2, Local<T3, TLocal>>>, TCallStack> il)
             where TParameter : ITypeList
             where TLocal : ITypeList
             where TCallStack : ITypeList
             => new IL<TParameter, Local<T, Local<T2, Local<T3, TLocal>>>, Stack<Ref<T3>, TCallStack>>(new OpIndex_S(OpCodes.Ldloca_S, 2), il);
 
-        public static IL<TParameter, Local<T, Local<T2, Local<T3, Local<T4, TLocal>>>>, Stack<Ref<T4>, TCallStack>> Ldloca_3<TThis, T, T2, T3, T4, TParameter, TLocal, TCallStack>(this IL<TParameter, Local<T, Local<T2, Local<T3, Local<T4, TLocal>>>>, TCallStack> il)
+        public static IL<TParameter, Local<T, Local<T2, Local<T3, Local<T4, TLocal>>>>, Stack<Ref<T4>, TCallStack>> Ldloca_3<T, T2, T3, T4, TParameter, TLocal, TCallStack>(this IL<TParameter, Local<T, Local<T2, Local<T3, Local<T4, TLocal>>>>, TCallStack> il)
             where TParameter : ITypeList
             where TLocal : ITypeList
             where TCallStack : ITypeList
