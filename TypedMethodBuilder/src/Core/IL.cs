@@ -11,9 +11,6 @@ namespace TypedMethodBuilder
     }
 
     public class IL<TParameter, TLocal, TCallStack> : IL
-        where TParameter : ITypeList
-        where TLocal : ITypeList
-        where TCallStack : ITypeList
     {
         private readonly Stack<Op> _ops;
 
@@ -32,7 +29,7 @@ namespace TypedMethodBuilder
         internal IL(ILabel label, IL parent) : this(parent.Ops, parent.Labels.Add(label))
         { }
 
-        internal IL(Op op, ILabel label, IL parent) : this(parent.Ops.Add(op), parent.Labels.Add(label))
+        internal IL(ILabel label, Op op, IL parent) : this(parent.Ops.Add(op), parent.Labels.Add(label))
         { }
 
         private IL(Stack<Op> ops, Stack<ILabel> labels)

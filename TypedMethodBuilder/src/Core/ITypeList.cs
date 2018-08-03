@@ -1,5 +1,8 @@
 namespace TypedMethodBuilder
 {
+    public interface Void
+    { }
+
     public interface ITypeList
     { }
 

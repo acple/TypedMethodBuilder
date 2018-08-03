@@ -156,5 +156,64 @@ namespace UnitTest.TypedMethodBuilder
                     func.Invoke(x).Is(x.AddYears(100));
             }
         }
+
+        [Fact]
+        public void LabelTest()
+        {
+            {
+                var func = IL<object>.MethodBuilder<int, int>() // (x, y) => !(x > y) ? x : y;
+                    .Ldarg_1()
+                    .Ldarg_2()
+                    .Bgt_S(out var ifArg1IsGreaterThanArg2)
+                    .Ldarg_1()
+                    .Ret()
+                    .MarkLabel(ifArg1IsGreaterThanArg2)
+                    .Ldarg_2()
+                    .Build();
+
+                func.Invoke(2, 4).Is(2);
+                func.Invoke(9, 6).Is(6);
+            }
+
+            {
+                var func = IL<object>.MethodBuilder<int, int>()
+                    .Ldarg_1().Dup().Dup().Dup().Dup() // deep stack
+                    .Ldarg_2()
+                    .Bge_S(out var label)
+                    .Pop().Pop().Pop()
+                    .Ret()
+                    .MarkLabel(label)
+                    .Add().Add().Add()
+                    .Build();
+
+                func.Invoke(2, 3).Is(2);
+                func.Invoke(3, 3).Is(12);
+            }
+
+            {
+                var func = IL<object>.MethodBuilder<int, int>()
+                    .Ldc_I4(0) // counter on stack
+
+                    .Ldarg_1().Stloc_0() // loc0 = arg1
+
+                    .MarkLabel(out var loop)
+
+                    .Ldc_I4(1).Add() // counter++
+
+                    .Ldloc_0()
+                    .Ldarg_2()
+                    .Sub()
+                    .Stloc_0() // loc0 -= arg2
+
+                    .Ldloc_0()
+                    .Ldc_I4(0)
+                    .Bgt_S(loop) // loc0 > 0
+
+                    .Build(); // return counter
+
+                func.Invoke(100, 5).Is(20);
+                func.Invoke(81, 9).Is(9);
+            }
+        }
     }
 }
