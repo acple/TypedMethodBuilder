@@ -153,6 +153,6 @@ namespace TypedMethodBuilder
         }
 
         public override void Emit(ILGenerator generator, IReadOnlyDictionary<ILabel, Label> labels)
-            => generator.Emit(this.OpCode, labels.Join(this._labels, x => x.Key, x => x, (x, _) => x.Value).ToArray());
+            => generator.Emit(this.OpCode, this._labels.Join(labels, x => x, x => x.Key, (_, x) => x.Value).ToArray());
     }
 }
