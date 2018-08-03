@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Emit;
 using ChainingAssertion;
 using TypedMethodBuilder;
 using Xunit;
@@ -91,7 +90,7 @@ namespace UnitTest.TypedMethodBuilder
                 var func = IL.MethodBuilder<int>()
                     .Ldarg_1()
                     .Box()
-                    .Callvirt((Func<string>)new object().ToString)
+                    .Callvirt(new object().ToString)
                     .Build();
 
                 func.Invoke(1234).Is("1234");
@@ -135,7 +134,7 @@ namespace UnitTest.TypedMethodBuilder
             {
                 var func = IL.MethodBuilder<int>()
                     .Ldarga_1()
-                    .CallInstance((Func<string>)default(int).ToString)
+                    .CallInstance(default(int).ToString)
                     .Build();
 
                 foreach (var x in Enumerable.Range(-100, 65535))
