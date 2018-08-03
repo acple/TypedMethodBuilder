@@ -29,7 +29,7 @@ namespace UnitTest.TypedMethodBuilder
 
                 .Ldloc_0()
                 .Ldarg_2()
-                .LdLoc_1()
+                .Ldloc_1()
                 .CallInstance((x, y) => ($"{x.GetType()}, {y.GetType()}"))
                 // .Pop()
 
@@ -104,7 +104,7 @@ namespace UnitTest.TypedMethodBuilder
                     .Ldloc_0()
                     .Box()
                     .Stloc_1()
-                    .LdLoc_1()
+                    .Ldloc_1()
                     .Unbox_Any()
                     .Ldloc_0()
                     .Add()

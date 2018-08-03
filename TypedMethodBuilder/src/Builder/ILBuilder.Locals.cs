@@ -54,19 +54,19 @@ namespace TypedMethodBuilder
             where TCallStack : ITypeList
             => new IL<TParameter, Local<T, TLocal>, Stack<T, TCallStack>>(new Op(OpCodes.Ldloc_0), il);
 
-        public static IL<TParameter, Local<T, Local<T2, TLocal>>, Stack<T2, TCallStack>> LdLoc_1<T, T2, TParameter, TLocal, TCallStack>(this IL<TParameter, Local<T, Local<T2, TLocal>>, TCallStack> il)
+        public static IL<TParameter, Local<T, Local<T2, TLocal>>, Stack<T2, TCallStack>> Ldloc_1<T, T2, TParameter, TLocal, TCallStack>(this IL<TParameter, Local<T, Local<T2, TLocal>>, TCallStack> il)
             where TParameter : ITypeList
             where TLocal : ITypeList
             where TCallStack : ITypeList
             => new IL<TParameter, Local<T, Local<T2, TLocal>>, Stack<T2, TCallStack>>(new Op(OpCodes.Ldloc_1), il);
 
-        public static IL<TParameter, Local<T, Local<T2, Local<T3, TLocal>>>, Stack<T3, TCallStack>> LdLoc_2<T, T2, T3, TParameter, TLocal, TCallStack>(this IL<TParameter, Local<T, Local<T2, Local<T3, TLocal>>>, TCallStack> il)
+        public static IL<TParameter, Local<T, Local<T2, Local<T3, TLocal>>>, Stack<T3, TCallStack>> Ldloc_2<T, T2, T3, TParameter, TLocal, TCallStack>(this IL<TParameter, Local<T, Local<T2, Local<T3, TLocal>>>, TCallStack> il)
             where TParameter : ITypeList
             where TLocal : ITypeList
             where TCallStack : ITypeList
             => new IL<TParameter, Local<T, Local<T2, Local<T3, TLocal>>>, Stack<T3, TCallStack>>(new Op(OpCodes.Ldloc_2), il);
 
-        public static IL<TParameter, Local<T, Local<T2, Local<T3, Local<T4, TLocal>>>>, Stack<T4, TCallStack>> LdLoc_3<T, T2, T3, T4, TParameter, TLocal, TCallStack>(this IL<TParameter, Local<T, Local<T2, Local<T3, Local<T4, TLocal>>>>, TCallStack> il)
+        public static IL<TParameter, Local<T, Local<T2, Local<T3, Local<T4, TLocal>>>>, Stack<T4, TCallStack>> Ldloc_3<T, T2, T3, T4, TParameter, TLocal, TCallStack>(this IL<TParameter, Local<T, Local<T2, Local<T3, Local<T4, TLocal>>>>, TCallStack> il)
             where TParameter : ITypeList
             where TLocal : ITypeList
             where TCallStack : ITypeList
