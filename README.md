@@ -13,9 +13,9 @@ private IEnumerable<string> MyFunc()
 
 static void Main()
 {
-    var instance = this;
+    var instance = new MyClass();
 
-    var f = IL<MyClass> // an instance type
+    var func = IL<MyClass> // an instance type
         .MethodBuilder<int, string>() // define parameters. (int, string) => { ? }
         .Ldarg_2() // load parameter. stack: [ string ]
         .Call(int.Parse) // call static method. stack: [ string ] => [ int ]
@@ -28,6 +28,8 @@ static void Main()
         // .Pop() // <- if you uncomment this, callstack is popped, the Build() result type is Action<int, string> !
 
         .Build(instance); // create delegate, the delegate type is Func<int, string, IEnumerable<string>>
+
+    func.Invoke(123, "456");
 }
 ```
 

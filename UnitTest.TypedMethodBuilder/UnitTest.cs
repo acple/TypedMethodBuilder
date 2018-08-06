@@ -14,7 +14,7 @@ namespace UnitTest.TypedMethodBuilder
         {
             var instance = this;
 
-            var f = IL<UnitTest>.MethodBuilder<int, string, double, DateTime>()
+            var func = IL<UnitTest>.MethodBuilder<int, string, double, DateTime>()
                 .Ldarg_2()
                 .Stloc_0()
                 .Ldloc_0()
@@ -39,18 +39,22 @@ namespace UnitTest.TypedMethodBuilder
 
                 .Build(instance);
 
-            var result = f.Invoke(7, "abcd", 99.9, DateTime.Now);
+            var result = func.Invoke(7, "abcd", 99.9, DateTime.Now);
             result.Is("System.String, System.DateTime");
         }
+
         private static void Function(string x)
         { }
+
+        private IEnumerable<string> MyFunc()
+            => new[] { "abc", "def", "ghi" };
 
         [Fact]
         public void Example()
         {
             var instance = this;
 
-            var f = IL<UnitTest> // an instance type
+            var func = IL<UnitTest> // an instance type
                 .MethodBuilder<int, string>() // define parameters. (int, string) => { ? }
                 .Ldarg_2() // load parameter. stack: [ string ]
                 .Call(int.Parse) // call static method. stack: [ string ] => [ int ]
@@ -64,13 +68,10 @@ namespace UnitTest.TypedMethodBuilder
 
                 .Build(instance); // create delegate, the delegate type is Func<int, string, IEnumerable<string>>
 
-            var result = f.Invoke(123, "456");
+            var result = func.Invoke(123, "456");
 
             result.Is("abc", "def", "ghi");
         }
-
-        private IEnumerable<string> MyFunc()
-            => new[] { "abc", "def", "ghi" };
 
         [Fact]
         public void Ldc_I4Test()
@@ -97,7 +98,7 @@ namespace UnitTest.TypedMethodBuilder
             }
 
             {
-                var func = IL<object>.MethodBuilder<int>()
+                var func = IL.MethodBuilder<int>()
                     .Ldarg_1()
                     .Stloc_0()
                     .Ldloc_0()
@@ -149,7 +150,7 @@ namespace UnitTest.TypedMethodBuilder
                     .Build();
 
                 var source = Enumerable.Repeat(new Random("date".GetHashCode()), 1000)
-                    .Select(x => (long)x.Next())
+                    .Select(x => x.Next())
                     .Select(x => new DateTime(x));
                 foreach (var x in source)
                     func.Invoke(x).Is(x.AddYears(100));
