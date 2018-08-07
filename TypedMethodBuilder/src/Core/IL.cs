@@ -10,8 +10,10 @@ namespace TypedMethodBuilder
         Stack<ILabel> Labels { get; }
     }
 
-    public class IL<TParameter, TLocal, TCallStack> : IIL
+    public readonly struct IL<TParameter, TLocal, TCallStack> : IIL
     {
+        internal static IL<TParameter, TLocal, TCallStack> New => new IL<TParameter, TLocal, TCallStack>(Stack<Op>.Empty, Stack<ILabel>.Empty);
+
         private readonly Stack<Op> _ops;
 
         private readonly Stack<ILabel> _labels;
@@ -20,22 +22,19 @@ namespace TypedMethodBuilder
 
         Stack<ILabel> IIL.Labels => this._labels;
 
-        internal IL() : this(Stack<Op>.Empty, Stack<ILabel>.Empty)
-        { }
-
-        internal IL(Op op, IIL parent) : this(parent.Ops.Add(op), parent.Labels)
-        { }
-
-        internal IL(ILabel label, IIL parent) : this(parent.Ops, parent.Labels.Add(label))
-        { }
-
-        internal IL(ILabel label, Op op, IIL parent) : this(parent.Ops.Add(op), parent.Labels.Add(label))
-        { }
-
         private IL(Stack<Op> ops, Stack<ILabel> labels)
         {
             this._ops = ops;
             this._labels = labels;
         }
+
+        internal IL<TParamNext, TLocalNext, TStackNext> Next<TParamNext, TLocalNext, TStackNext>(Op op)
+            => new IL<TParamNext, TLocalNext, TStackNext>(this._ops.Add(op), this._labels);
+
+        internal IL<TParamNext, TLocalNext, TStackNext> Next<TParamNext, TLocalNext, TStackNext>(ILabel label)
+            => new IL<TParamNext, TLocalNext, TStackNext>(this._ops, this._labels.Add(label));
+
+        internal IL<TParamNext, TLocalNext, TStackNext> Next<TParamNext, TLocalNext, TStackNext>(ILabel label, Op op)
+            => new IL<TParamNext, TLocalNext, TStackNext>(this._ops.Add(op), this._labels.Add(label));
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace TypedMethodBuilder
 {
-    internal class Stack<T> : IReadOnlyCollection<T>
+    internal sealed class Stack<T> : IReadOnlyCollection<T>
     {
         public static Stack<T> Empty { get; } = new Stack<T>();
 
