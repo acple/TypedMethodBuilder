@@ -29,12 +29,12 @@ namespace TypedMethodBuilder
     {
         private readonly MethodInfo _method;
 
-        public OpCall(MethodInfo method) : this(OpCodes.Call, method)
+        public OpCall(MethodInfo method, bool isStatic) : this(OpCodes.Call, method, isStatic)
         { }
 
-        public OpCall(OpCode opCode, MethodInfo method) : base(opCode)
+        public OpCall(OpCode opCode, MethodInfo method, bool isStatic) : base(opCode)
         {
-            this._method = method;
+            this._method = (method.IsStatic == isStatic) ? method : throw new ArgumentException("method type mismatch");
         }
 
         public override void Emit(ILGenerator generator, IReadOnlyDictionary<ILabel, Label> labels)
