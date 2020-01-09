@@ -8,7 +8,7 @@ namespace TypedMethodBuilder
             where TParameter : ITypeList
             where TLocal : ITypeList
             where TCallStack : ITypeList
-            where T : class
+            where T : class?
             => il.Next<TParameter, TLocal, Stack<T, TCallStack>>(new Op(OpCodes.Ldnull));
 
         public static IL<TParameter, TLocal, Stack<int, TCallStack>> Ldc_I4<TParameter, TLocal, TCallStack>(this IL<TParameter, TLocal, TCallStack> il, int value)

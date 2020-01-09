@@ -15,6 +15,7 @@ namespace TypedMethodBuilder
 
         private Stack()
         {
+            this.Value = default!;
             this.Next = this;
         }
 
@@ -30,7 +31,7 @@ namespace TypedMethodBuilder
 
         public IEnumerator<T> GetEnumerator()
         {
-            for (var current = this; current != current.Next; current = current.Next)
+            for (var current = this; current != Empty; current = current.Next)
                 yield return current.Value;
         }
 
