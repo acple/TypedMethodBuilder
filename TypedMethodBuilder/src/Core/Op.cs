@@ -29,16 +29,28 @@ namespace TypedMethodBuilder
     {
         private readonly MethodInfo _method;
 
-        public OpCall(MethodInfo method, bool isStatic) : this(OpCodes.Call, method, isStatic)
-        { }
-
-        public OpCall(OpCode opCode, MethodInfo method, bool isStatic) : base(opCode)
+        public OpCall(OpCode opCode, MethodInfo method) : base(opCode)
         {
-            this._method = (method.IsStatic == isStatic) ? method : throw new ArgumentException("method type mismatch");
+            this._method = method;
         }
 
         public override void Emit(ILGenerator generator, IReadOnlyDictionary<ILabel, Label> labels)
             => generator.EmitCall(this.OpCode, this._method, null);
+
+        public static Op Static(MethodInfo method)
+            => Static(OpCodes.Call, method);
+
+        public static Op Static(OpCode opCode, MethodInfo method)
+            => new OpCall(opCode, ValidateMethodType(method, isStatic: true));
+
+        public static Op Instance(MethodInfo method)
+            => Instance(OpCodes.Call, method);
+
+        public static Op Instance(OpCode opCode, MethodInfo method)
+            => new OpCall(opCode, ValidateMethodType(method, isStatic: false));
+
+        private static MethodInfo ValidateMethodType(MethodInfo method, bool isStatic)
+            => (method.IsStatic == isStatic) ? method : throw new ArgumentException("method type mismatch");
     }
 
     internal class OpType : Op
