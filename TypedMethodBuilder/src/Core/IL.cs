@@ -1,13 +1,13 @@
-using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace TypedMethodBuilder
 {
     internal interface IIL
     {
-        Stack<Op> Ops { get; }
+        IEnumerable<Op> Ops { get; }
 
-        Stack<ILabel> Labels { get; }
+        IEnumerable<ILabel> Labels { get; }
     }
 
     public readonly struct IL<TParameter, TLocal, TCallStack> : IIL
@@ -18,9 +18,9 @@ namespace TypedMethodBuilder
 
         private readonly Stack<ILabel> _labels;
 
-        Stack<Op> IIL.Ops => this._ops;
+        IEnumerable<Op> IIL.Ops => this._ops.Reverse();
 
-        Stack<ILabel> IIL.Labels => this._labels;
+        IEnumerable<ILabel> IIL.Labels => this._labels.Reverse();
 
         private IL(Stack<Op> ops, Stack<ILabel> labels)
         {

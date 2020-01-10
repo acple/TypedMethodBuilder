@@ -4,7 +4,7 @@ namespace TypedMethodBuilder
     { }
 
     public class Label<TCallStack> : ILabel
-        where TCallStack : ITypeList
+        where TCallStack : ICallStack
     {
         internal Label()
         { }
